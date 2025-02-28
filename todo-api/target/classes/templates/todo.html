@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+
+<h1>My To-Do List</h1>
+
+<!-- Form to add a new to-do -->
+<div id="add-todo-form">
+    <input type="text" id="new-todo" placeholder="Enter a new to-do" />
+    <button onclick="addTodo()">Add To-Do</button>
+</div>
+
+<!-- Display list of to-dos -->
+<div id="todos">
+    <ul id="todo-list"></ul>
+</div>
+
+<script>
+
+        window.onload = function() {
+            fetchTodos();
+        }
+
+
+        function fetchTodos() {
+            fetch('/todos')
+                .then(response => response.json())
+                .then(data => {
+                    const todoList = document.getElementById("todo-list");
+                    todoList.innerHTML = ""; // Clear the current list
+
+                    data.forEach(todo => {
+                        const li = document.createElement("li");
+                        li.setAttribute("id", `todo-${todo.id}`);
+
+                        li.innerHTML = `
+                            <span contenteditable="true" onblur="updateTodoTitle(${todo.id}, this.innerText)">
+                                ${todo.title}
+                            </span>
+                            <button onclick="deleteTodo(${todo.id})">Delete</button>
+                        `;
+
+                        todoList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error fetching todos:', error));
+        }
+
+
+        function addTodo() {
+            const todoTitle = document.getElementById("new-todo").value;
+
+            if (!todoTitle.trim()) {
+                alert("Please enter a valid to-do!");
+                return;
+            }
+
+            fetch('/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: todoTitle })
+            })
+            .then(response => response.json())
+            .then(data => {
+                fetchTodos(); // Reload the to-do list
+                document.getElementById("new-todo").value = ''; // Clear the input field
+            })
+            .catch(error => console.error('Error adding todo:', error));
+        }
+
+        // Function to delete a to-do
+        function deleteTodo(id) {
+            fetch(`/todos/${id}`, {
+                method: 'DELETE',
+            })
+            .then(() => {
+                document.getElementById(`todo-${id}`).remove(); // Remove the item from the list
+            })
+            .catch(error => console.error('Error deleting todo:', error));
+        }
+
+        // Function to update the title of an existing to-do
+        function updateTodoTitle(id, newTitle) {
+            fetch(`/todos/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: newTitle })
+            })
+            .then(response => response.json())
+            .then(() => {
+                console.log("To-Do updated!");
+            })
+            .catch(error => console.error('Error updating todo:', error));
+        }
+    </script>
+</body>
+</html>

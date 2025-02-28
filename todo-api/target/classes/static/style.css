@@ -1,0 +1,84 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+#add-todo-form {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+#new-todo {
+    padding: 10px;
+    width: 250px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#todos {
+    width: 60%;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+li button {
+    background-color: #f44336;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+li button:hover {
+    background-color: #e53935;
+}
+
+span[contenteditable="true"] {
+    flex-grow: 1;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 5px;
+}
+
+span[contenteditable="true"]:focus {
+    background-color: #fff;
+}
